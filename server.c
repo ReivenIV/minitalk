@@ -14,10 +14,7 @@
 
 static char *str = NULL;
 
-static void signals_parser(int sig, siginfo_t *info, void *context)
-{
-	
-}
+
 
 int	main(int ac, char **av)
 {
