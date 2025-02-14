@@ -12,7 +12,25 @@
 
 #include "minitalk.h"
 
-void	signal_parser(int signal, sigiinfo_t *info, void *context)
+void set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr)
+{
+	struct	sigaction	sig;
+
+	sig.sa_sigaction = handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = SA_SIGINFO | SA_RESTART;
+	if (sigusr == 1)
+		sigaction(SIGUSR1, &sig, NULL);
+	else if (sigusr == 2)
+		sigaction(SIGUSR2, &sig, NULL);
+	else
+	{
+		sigaction(SIGUSR1, &sig, NULL);
+		sigaction(SIGUSR2, &sig, NULL);
+	}
+}
+
+void	signal_parser(int signal, siginfo_t *info, void *context)
 {
 	static char	c = 0;
 	static int	bit = 0;
