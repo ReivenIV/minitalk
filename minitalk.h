@@ -17,14 +17,25 @@
 # include <unistd.h>		// for write function
 # include <signal.h>		// main lib of these project
 
-//		-------------
-//		::  tools  ::
-//		-------------
+//		------------------
+//		::  tools_strs  ::
+//		------------------
 int		ft_strlen(char *s);
 void	ft_putstr(char *s);
-void	ft_putnbr(int n);
 int		ft_atoi(const char *str);
-char	*update_globar_str(char *str, char c)
+char	*update_globar_str(char *str, char c);
+
+
+//		-----------------
+//		::  tools_nbs  ::
+//		-----------------
+void	ft_putnbr(int n);
+
+
+//		------------------
+//		::  tools_bits  ::
+//		------------------
+char	handle_bit(char c, int signal, int *bit_position);
 
 
 #endif
