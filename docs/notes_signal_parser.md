@@ -9,7 +9,7 @@
 
 ```c
 // src: server.c
-void	sig_handler(int signal, siginfo_t *info, void *context)
+void	signal_parser(int signal, siginfo_t *info, void *context)
 {
 	static char	c = 0;      				  		   // Static variable to store the current character
 	static int	bit = 0;  							   // Static variable to store the current bit position
