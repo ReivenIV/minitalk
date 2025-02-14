@@ -52,8 +52,8 @@ int	ft_atoi(const char *str)
 	}
 	return (res * power);
 }
-
-char	*update_globar_str(char *str, char c)
+// Will update the global str with the newly created incoming char.
+char	*update_global_str(char *str, char c)
 {
 	char *updated_str;
 	int i;

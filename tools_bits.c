@@ -18,9 +18,9 @@
 /*
 we define the value of SIGUSR1 & SIGUSR2 and we added to 'c' 
 in the bit realm: we move one position to the left inside 'c' byte(8bits)
-to the left.  
+to the left.
 */
-char	handle_bit(char c, int signal, int *bit_position)
+char	handle_incoming_bit(char c, int signal, int *bit_position)
 {
 	int bit_value;
 
