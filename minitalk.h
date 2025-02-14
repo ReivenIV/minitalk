@@ -40,4 +40,10 @@ void	ft_putnbr(int n);
 //		------------------
 char	handle_incoming_bit(char c, int signal, int *bit_position);
 
+//		---------------------
+//		::  tools_signals  ::
+//		---------------------
+void 	set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr);
+void	signal_parser(int signal, siginfo_t *info, void *context);
+
 #endif
