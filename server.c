@@ -12,21 +12,19 @@
 
 #include "minitalk.h"
 
-static char *global_str = NULL;
-
-
+char *global_str = NULL;
 
 int	main(int ac, char **av)
 {
-
 	if (ac == 1)
 	{
 		ft_putstr("Server PID my dear :: ");
 		ft_putnbr(getpid());
 		write(1, "\n", 1);
+		set_signal_action(&signal_parser, 3);
 		while(1)
 			pause();
-		free(str);
+		free(global_str);
 	}
 	exit(0);
 	return (0);
