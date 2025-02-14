@@ -25,7 +25,7 @@ void	ft_putstr(char *s)
 {
 	if (!s)
 		return ;
-	write(1, s, ft_strlen2(s));
+	write(1, s, ft_strlen(s));
 }
 
 void	ft_putnbr(int n)
@@ -44,7 +44,7 @@ void	ft_putnbr(int n)
 	}
 	if (n > 9)
 	{
-		ft_putnbr2(n / 10);
+		ft_putnbr(n / 10);
 	}
 	c = (n % 10) + '0';
 	write(1, &c, 1);
@@ -73,4 +73,33 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (res * power);
+}
+
+char	*update_globar_str(char *str, char c)
+{
+	char *updated_str;
+	int i;
+
+	if (!str)
+	{
+		updated_str = malloc(sizeof(char) * 2);
+		if (!updated_str)
+			return (NULL);
+		updated_str[0] = c;
+		updated_str[1] = '\0';
+		return(updated_str);		
+	}
+	updated_str = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (!updated_str)
+		return (NULL);
+	i = 0;
+	while (str[i] != '\0')
+	{
+		updated_str[i] = str[i];
+		i++;
+	}
+	updated_str[i] = c;
+	updated_str[i + 1] = '\0';
+	free(str);
+	return (updated_str); 
 }
