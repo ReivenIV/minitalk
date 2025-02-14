@@ -1,3 +1,5 @@
+explanation done with gpt my dear: 
+
 ```c
 void set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr)
 {
