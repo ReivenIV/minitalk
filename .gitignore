@@ -2,6 +2,11 @@ references
 comands.txt
 push_swap
 *.gch
+
+# minitalk 
+server
+client
+
 # System files
 .DS_Store
 
