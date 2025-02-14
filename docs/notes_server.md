@@ -79,3 +79,49 @@ c = (c << 1) | (signal == SIGUSR1);
 ```
 This line shifts the current character c to the left by one bit and adds the received bit (1 if the signal is **SIGUSR1**, 0 otherwise).
 
+---
+## Line treating bits, with examples to understand how it works :
+```c
+ c = (c << 1) | (signal == SIGUSR1);
+```
+
+
+### Explanation
+1. Shift Left **(c << 1)**: This operation shifts the bits of c one position to the left. This makes room for the new bit that will be added.
+
+2. Bitwise OR (|): This operation adds the new bit to the least significant position of c.
+3. Comparison (signal == SIGUSR1): This comparison checks if the received signal is SIGUSR1. If it is, the result is 1; otherwise, it is 0.
+Example
+Let's go through an example step by step:
+
+1. Initial State:
+
+- Assume c is initially 00000000 (in binary).
+- Assume bit is initially 0.
+
+2. First Signal (SIGUSR1):
+- signal == SIGUSR1 evaluates to 1.
+- c << 1 shifts c left: 00000000 becomes 00000000.
+- c = (c << 1) | 1 results in 00000001.
+- bit is incremented to 1.
+
+3. Second Signal (SIGUSR2):
+- signal == SIGUSR1 evaluates to 0.
+- c << 1 shifts c left: 00000001 becomes 00000010.
+- c = (c << 1) | 0 results in 00000010.
+- bit is incremented to 2.
+
+4. Third Signal (SIGUSR1):
+- **signal == SIGUSR1** evaluates to 1.
+- **c << 1** shifts c left: 00000010 becomes 00000100.
+- **c = (c << 1) | 1** results in 00000101.
+- **bit** is incremented to 3.
+
+5. Fourth Signal (SIGUSR2):
+- **signal == SIGUSR1** evaluates to 0.
+- **c << 1** shifts c left: 00000101 becomes 00001010.
+- **c = (c << 1) | 0** results in 00001010.
+- **bit** is incremented to 4.
+
+### Summary
+Each time a signal is received, the current value of c is shifted left by one bit, and the new bit (determined by whether the signal is SIGUSR1 or SIGUSR2) is added to the least significant bit of c. This process continues until 8 bits have been received, forming a complete character.
