@@ -20,7 +20,7 @@ we define the value of SIGUSR1 & SIGUSR2 and we added to 'c'
 in the bit realm: we move one position to the left inside 'c' byte(8bits)
 to the left.
 */
-char	handle_incoming_bit(char c, int signal, int *bit_position)
+char	handle_incoming_bit(char c, int signal, int *bit_count)
 {
 	int bit_value;
 
@@ -31,13 +31,6 @@ char	handle_incoming_bit(char c, int signal, int *bit_position)
 		bit_value = 0;
 
 	c = c << 1 | bit_value;		// We move 1 bit to the left then we update the current value with "bit_value".
-	(*bit_position)++;			// we update the bit count.
+	(*bit_count)++;				// we update the bit count.
 	return (c);
 }
-
-
-// TODO
-// static void signals_parser(int sig, siginfo_t *info, void *context)
-// {
-	
-// }
