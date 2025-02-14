@@ -12,7 +12,7 @@
 
 #include "minitalk.h"
 
-static char *str = NULL;
+static char *global_str = NULL;
 
 
 
