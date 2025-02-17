@@ -52,7 +52,7 @@ int	ft_atoi(char *str)
 	}
 	return (res * power);
 }
-// Will update the global str with the newly created incoming char.
+// server: Will update the global str with the newly created incoming char.
 char	*update_global_str(char *str, char c)
 {
 	char *updated_str;
