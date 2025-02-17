@@ -18,7 +18,7 @@ int	main(int ac, char **av)
 {
 	if (ac == 1)
 	{
-		ft_putstr("Server PID my dear :: ");
+		write(1, "Server PID my dear :: ", 22);
 		ft_putnbr(getpid());
 		write(1, "\n", 1);
 		set_signal_action(&signal_parser, 3);
