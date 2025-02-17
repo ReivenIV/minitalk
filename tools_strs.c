@@ -26,6 +26,7 @@ void	ft_putstr(char *s)
 	if (!s)
 		return ;
 	write(1, s, ft_strlen(s));
+	write(1, "\n", 1);
 }
 
 int	ft_atoi(char *str)
