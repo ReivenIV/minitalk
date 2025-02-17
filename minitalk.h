@@ -27,7 +27,7 @@ extern char	*global_str;
 //		------------------
 int		ft_strlen(char *s);
 void	ft_putstr(char *s);
-int		ft_atoi(const char *str);
+int		ft_atoi(char *str);
 char	*update_global_str(char *str, char c);
 
 //		-----------------
