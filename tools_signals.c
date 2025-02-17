@@ -12,6 +12,7 @@
 
 #include "minitalk.h"
 
+// Will init the struct siginfo_t 
 void set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr)
 {
     struct	sigaction	sig; 														// Declare a sigaction structure
@@ -30,7 +31,7 @@ void set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr)
         sigaction(SIGUSR2, &sig, NULL); 											// Set the action for SIGUSR2
     }
 }
-
+// Server : 
 void	signal_parser(int signal, siginfo_t *info, void *context)
 {
 	static char	c = 0;
@@ -56,4 +57,35 @@ void	signal_parser(int signal, siginfo_t *info, void *context)
 		bit_count = 0;
 	}
 	kill(info->si_pid, SIGUSR1);
+}
+
+// client : Will wait/listen the server till answer that it received the msg
+void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
+{
+	(void)	context;
+	(void)	info;
+	if (signum == SIGUSR1 || signum == SIGUSR2)
+		g_acknowledgment_status = 1;
+	else
+	{
+		write(2, "problem with the server\n", 20);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	wait_validation_from_server(void)
+{
+	int	retries = 1000;
+
+	while (!g_acknowledgment_status && retries > 0)
+	{
+		usleep(100)
+		retries--;
+	}
+	if (retries == 0)
+	{
+		write(2, "server fail to validate", 23);
+        exit(EXIT_FAILURE);
+	}
+	g_acknowledgment_status = 0;
 }
