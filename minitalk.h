@@ -17,11 +17,6 @@
 # include <unistd.h>		// for write function
 # include <signal.h>		// main lib of these project
 
-//		------------------------
-//		::  global variables  ::
-//		------------------------
-extern char	*global_str;
-
 //		------------------
 //		::  tools_strs  ::
 //		------------------
@@ -54,10 +49,6 @@ void	handle_send_signal(int pid, char *str);
 // global :
 void 	set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr);
 
-// server : 
-void	signal_parser(int signal, siginfo_t *info, void *context);
-
-// client : 
 void	stablish_link_with_server(int signum, siginfo_t *info, void *content);
 void	wait_validation_from_server(void);
 
