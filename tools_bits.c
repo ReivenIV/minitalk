@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools_signals.c                                    :+:      :+:    :+:   */
+/*   tools_bits.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rita <rita>                                +#+  +:+       +#+        */
+/*   By: fwebe-ir <fwebe-ir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:44:24 by rita              #+#    #+#             */
-/*   Updated: 2025/02/14 13:44:24 by rita             ###   ########.fr       */
+/*   Updated: 2025/02/17 14:30:27 by fwebe-ir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ to the left.
 */
 char	handle_incoming_bit(char c, int signal, int *bit_count)
 {
-	int bit_value;
+	int	bit_value;
 
-	// We define values
 	if (signal == SIGUSR1)
 		bit_value = 1;
 	if (signal == SIGUSR2)
 		bit_value = 0;
-
-	c = c << 1 | bit_value;		// We move 1 bit to the left then we update the current value with "bit_value".
-	(*bit_count)++;				// we update the bit count.
+	c = c << 1 | bit_value;
+	(*bit_count)++;
 	return (c);
 }
-

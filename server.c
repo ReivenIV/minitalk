@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rita <rita>                                +#+  +:+       +#+        */
+/*   By: fwebe-ir <fwebe-ir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:58:45 by rita              #+#    #+#             */
-/*   Updated: 2025/02/13 17:58:45 by rita             ###   ########.fr       */
+/*   Updated: 2025/02/17 14:31:50 by fwebe-ir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-char *global_str = NULL;
+char	*g_str = NULL;
 
 // Server : 
 void	signal_parser(int signal, siginfo_t *info, void *context)
@@ -26,14 +26,14 @@ void	signal_parser(int signal, siginfo_t *info, void *context)
 	{
 		if (c == '\0')
 		{
-			ft_putstr(global_str);
-			free(global_str);
-			global_str = NULL;
+			ft_putstr(g_str);
+			free(g_str);
+			g_str = NULL;
 		}
 		else
 		{
-			global_str = update_global_str(global_str, c);
-			if (global_str == NULL)
+			g_str = update_global_str(g_str, c);
+			if (g_str == NULL)
 				return ;
 		}
 		c = 0;
@@ -42,19 +42,18 @@ void	signal_parser(int signal, siginfo_t *info, void *context)
 	kill(info->si_pid, SIGUSR1);
 }
 
-
 int	main(int ac, char **av)
 {
-	(void)	av;
+	(void) av;
 	if (ac == 1)
 	{
 		write(1, "Server PID my dear :: ", 22);
 		ft_putnbr(getpid());
 		write(1, "\n", 1);
 		set_signal_action(&signal_parser, 3);
-		while(1)
+		while (1)
 			pause();
-		free(global_str);
+		free(g_str);
 	}
 	exit(0);
 	return (0);

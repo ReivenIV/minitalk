@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rita <rita>                                +#+  +:+       +#+        */
+/*   By: fwebe-ir <fwebe-ir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:26:45 by rita              #+#    #+#             */
-/*   Updated: 2025/02/13 18:26:45 by rita             ###   ########.fr       */
+/*   Updated: 2025/02/17 14:35:06 by fwebe-ir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile	sig_atomic_t	g_acknowledgment_status = 0;
+volatile sig_atomic_t	g_acknowledgment_status = 0;
 
 // client : Will wait/listen the server till answer that it received the msg
 void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 {
-	(void)	content;
-	(void)	info;
+	(void) content;
+	(void) info;
 	if (signum == SIGUSR1 || signum == SIGUSR2)
 		g_acknowledgment_status = 1;
 	else
@@ -27,11 +27,13 @@ void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 		exit(EXIT_FAILURE);
 	}
 }
+
 //client : after sending data to server we way validation receipt
 void	wait_validation_from_server(void)
 {
-	int	retries = 1000;
+	int	retries;
 
+	retries = 1000;
 	while (!g_acknowledgment_status && retries > 0)
 	{
 		usleep(100);
@@ -40,7 +42,7 @@ void	wait_validation_from_server(void)
 	if (retries == 0)
 	{
 		write(2, "server fail to validate", 23);
-        exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	g_acknowledgment_status = 0;
 }
@@ -75,8 +77,6 @@ void	handle_send_signal(int pid, char *str)
 	}
 }
 
-char *global_str = NULL;
-
 int	main(int ac, char **av)
 {
 	int	pid;
@@ -96,7 +96,7 @@ int	main(int ac, char **av)
 		}
 		if (av[2] == NULL)
 			return (0);
-		set_signal_action(stablish_link_with_server, 3);	// TODO send_msg
+		set_signal_action(stablish_link_with_server, 3);
 		handle_send_signal(pid, av[2]);
 		return (0);
 	}

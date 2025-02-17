@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rita <rita>                                +#+  +:+       +#+        */
+/*   By: fwebe-ir <fwebe-ir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:24:29 by rita              #+#    #+#             */
-/*   Updated: 2025/02/13 18:24:29 by rita             ###   ########.fr       */
+/*   Updated: 2025/02/17 14:32:29 by fwebe-ir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,9 @@ void	handle_send_signal(int pid, char *str);
 //		---------------------
 
 // global :
-void 	set_signal_action(void(*handler)(int, siginfo_t*, void*), int sigusr);
+void	set_signal_action(void (*handler)(int, siginfo_t*, void*), int sigusr);
 
 void	stablish_link_with_server(int signum, siginfo_t *info, void *content);
 void	wait_validation_from_server(void);
-
 
 #endif

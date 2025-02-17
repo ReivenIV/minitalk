@@ -21,6 +21,7 @@ int	ft_strlen(char *s)
 		++ret;
 	return (ret);
 }
+
 void	ft_putstr(char *s)
 {
 	if (!s)
@@ -53,11 +54,12 @@ int	ft_atoi(char *str)
 	}
 	return (res * power);
 }
+
 // server: Will update the global str with the newly created incoming char.
 char	*update_global_str(char *str, char c)
 {
-	char *updated_str;
-	int i;
+	char	*updated_str;
+	int		i;
 
 	if (!str)
 	{
@@ -66,7 +68,7 @@ char	*update_global_str(char *str, char c)
 			return (NULL);
 		updated_str[0] = c;
 		updated_str[1] = '\0';
-		return(updated_str);		
+		return (updated_str);
 	}
 	updated_str = malloc(sizeof(char) * (ft_strlen(str) + 2));
 	if (!updated_str)
@@ -80,5 +82,5 @@ char	*update_global_str(char *str, char c)
 	updated_str[i] = c;
 	updated_str[i + 1] = '\0';
 	free(str);
-	return (updated_str); 
+	return (updated_str);
 }
