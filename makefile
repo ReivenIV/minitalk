@@ -13,27 +13,29 @@
 NAME = minitalk
 CFLAGS = -Wall -Werror -Wextra
 CC = gcc
-SRCS = client.c server.c tools_bits.c tools_nbs.c tools_signals.c \
-tools_strs.c \
 
-OBJS = $(SRCS:.c=.o)
+CLIENT_SRCS = client.c tools_bits.c tools_nbs.c tools_signals.c tools_strs.c
+SERVER_SRCS = server.c tools_bits.c tools_nbs.c tools_signals.c tools_strs.c
+
+CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
+SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 
 # Rules 
 all: $(NAME)
 
 $(NAME): server client
 
-server: $(OBJS)
-	$(CC) -o server $(OBJS)
+server: $(SERVER_OBJS)
+	$(CC) -o server $(SERVER_OBJS)
 
-client: $(OBJS)
-	$(CC) -o client $(OBJS)
+client: $(CLIENT_OBJS)
+	$(CC) -o client $(CLIENT_OBJS)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(CLIENT_OBJS) $(SERVER_OBJS)
 	
 fclean: clean
 	rm -f server client
