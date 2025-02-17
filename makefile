@@ -22,6 +22,7 @@ SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 
 # Rules 
 all: $(NAME)
+	$(MAKE) clean
 
 $(NAME): server client
 
@@ -41,5 +42,6 @@ fclean: clean
 	rm -f server client
 
 re: fclean all
+	$(MAKE) clean
 
 .PHONY: all bonus clean fclean re
