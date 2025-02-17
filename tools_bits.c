@@ -35,32 +35,3 @@ char	handle_incoming_bit(char c, int signal, int *bit_count)
 	return (c);
 }
 
-// client: will send an *str "bit by bit" to server's pid. 
-void	handle_send_signal(int pid, char *str)
-{
-	int	bit;
-	int	i;
-
-	while (*str)
-	{
-		i = 7;
-		while (i >= 0)
-		{
-			bit = (*str >> i) & 1;
-			if (bit = 1)
-				kill(pid, SIGUSR1);
-			if (bit = 0)
-				kill(pid, SIGUSR2);
-			i--;
-			check_res_server();
-		}
-		str++;
-	}
-	i = 0;
-	while (i < 8)
-	{
-		kill(pid, SIGUSR2);
-		check_res_server();
-		i++;
-	}
-}
