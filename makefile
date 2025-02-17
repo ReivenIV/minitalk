@@ -24,19 +24,19 @@ all: $(NAME)
 $(NAME): server client
 
 server: $(OBJS)
-    $(CC) -o server $(OBJS)
+	$(CC) -o server $(OBJS)
 
 client: $(OBJS)
-    $(CC) -o client $(OBJS)
+	$(CC) -o client $(OBJS)
 
 %.o: %.c
-    $(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-    rm -f $(OBJS)
-    
+	rm -f $(OBJS)
+	
 fclean: clean
-    rm -f server client
+	rm -f server client
 
 re: fclean all
 
