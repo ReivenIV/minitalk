@@ -14,6 +14,8 @@
 
 char	*g_str = NULL;
 
+// Will recreate the string received in each signal from the client.
+// g_str will be the storage of chars until the str is finally recreated.
 void	signal_parser(int signal, siginfo_t *info, void *context)
 {
 	static char	c = 0;

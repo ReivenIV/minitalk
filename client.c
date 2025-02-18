@@ -14,7 +14,7 @@
 
 volatile sig_atomic_t	g_acknowledgment_status = 0;
 
-// client : Will wait/listen the server till answer that it received the msg
+// Will wait/listen the server till answer that it received the msg
 void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 {
 	(void) content;
@@ -30,7 +30,7 @@ void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 	}
 }
 
-//client : after sending data to server we way validation receipt
+// After sending data to server we way validation receipt
 void	wait_validation_from_server(void)
 {
 	int	retries;
@@ -49,7 +49,7 @@ void	wait_validation_from_server(void)
 	g_acknowledgment_status = 0;
 }
 
-// client: will send an *str "bit by bit" to server's pid. 
+// will send an *str "bit by bit" to server's pid. 
 void	handle_send_signal(int pid, char *str)
 {
 	int	bit;
