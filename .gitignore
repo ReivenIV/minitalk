@@ -6,6 +6,8 @@ push_swap
 # minitalk 
 server
 client
+server_bonus
+client_bonus
 
 # System files
 .DS_Store
