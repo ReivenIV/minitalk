@@ -14,7 +14,6 @@
 
 char	*g_str = NULL;
 
-// Server : 
 void	signal_parser(int signal, siginfo_t *info, void *context)
 {
 	static char	c = 0;
@@ -29,6 +28,7 @@ void	signal_parser(int signal, siginfo_t *info, void *context)
 			ft_putstr(g_str);
 			free(g_str);
 			g_str = NULL;
+			kill(info->si_pid, SIGUSR2);
 		}
 		else
 		{

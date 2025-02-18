@@ -19,8 +19,10 @@ void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 {
 	(void) content;
 	(void) info;
-	if (signum == SIGUSR1 || signum == SIGUSR2)
+	if (signum == SIGUSR1)
 		g_acknowledgment_status = 1;
+	else if (signum == SIGUSR2)
+		write(1, "Thanks my dear, msg received!\n", 30);
 	else
 	{
 		write(2, "problem with the server\n", 20);
