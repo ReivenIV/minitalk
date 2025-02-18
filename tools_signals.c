@@ -13,7 +13,7 @@
 #include "minitalk.h"
 
 // Will init the struct siginfo_t 
-void	et_signal_action(void (*handler)(int, siginfo_t*, void*), int sigusr)
+void	set_signal_action(void (*handler)(int, siginfo_t*, void*), int sigusr)
 {
 	struct sigaction	sig;
 
