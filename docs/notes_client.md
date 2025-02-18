@@ -17,9 +17,9 @@ The client program is responsible for sending a message to a server process usin
 
 ## **1. Global Variable**
 ```c
-volatile sig_atomic_t g_received_ack;
+volatile sig_atomic_t g_acknowledgment_status;
 ```
-- `g_received_ack` is a global variable that the signal handler will modify.
+- `g_acknowledgment_status` is a global variable that the signal handler will modify.
 - `volatile` ensures the compiler does not optimize away reads/writes since signals can change it asynchronously.
 - `sig_atomic_t` is a type that guarantees atomic access (safe from interruptions by signals).
 
@@ -29,18 +29,20 @@ volatile sig_atomic_t g_received_ack;
 
 #### Sumary :
 - This function is executed when the client receives `SIGUSR1` from the server.
-- It updates `g_received_ack` to 1, indicating the server received a bit.
+- It updates `g_acknowledgment_status` to 1, indicating the server received a bit.
 ```c
-void ack_handler(int signum, siginfo_t *info, void *context) // listen_server
+void stablish_link_with_server(int signum, siginfo_t *info, void *context) // listen_server
 {
-    (void) context; // Unused parameter
-    (void) info; // Unused parameter
-    if (signum == SIGUSR1 || signum == SIGUSR2) // Check if we have an income signal type SIGUSR1 or SIGUSR2
-        g_acknowledgment_status = 1; // Set acknowledgment status to 1
+    (void) context;                     // Unused parameter
+    (void) info;                        // Unused parameter
+    if (signum == SIGUSR1)              // Check if we have an income signal type SIGUSR1 or SIGUSR2
+        g_acknowledgment_status = 1;    // Set acknowledgment status to 1
+    else if (signum == SIGUSR2)         // If the server answers back SIGUSR2 we print a msg statement that validates the client the server received and printed the msg. 
+        write(1, "Thanks my dear, msg received!\n", 30);
     else // If the signal is not SIGUSR1 or SIGUSR2 (that means we didn't had any feedback from the server) could mean the pid is wrong or that the server is off for ex. 
     {
         write(2, "problem with the server\n", 20); 
-        exit(EXIT_FAILURE); // Exit the program with failure status
+        exit(EXIT_FAILURE);              // Exit the program with failure status
     }
 }
 ```
@@ -49,11 +51,11 @@ This function is used to handle the acknowledgment signals from the server. When
 
 ---
 
-## **3. Waiting for Acknowledgment (`wait_sig`)**
+## **3. Waiting for Acknowledgment (`wait_validation_from_server`)**
 This function waits for a response (acknowledgment) from the server after the client sends a signal. If no acknowledgment is received within the specified time, it reports an error and terminates the program.
 
 ```c
-void wait_sig(void)
+void wait_validation_from_server(void)
 {
     int retries = 10000; // Max retries (~1 second total with 100us sleep)
     
@@ -65,8 +67,8 @@ void wait_sig(void)
     
     if (retries == 0) // If retries run out
     {
-        write(2, "\e[31mError: No acknowledgment received\n\e[0m", 40); // Print error message to stderr
-        exit(EXIT_FAILURE); // Exit the program with failure status
+        write(2, "server fail to validate", 23);
+        exit(EXIT_FAILURE);
     }
 
     g_acknowledgment_status = 0; // Reset acknowledgment status
@@ -86,9 +88,9 @@ void wait_sig(void)
 
 ---
 
-## **4. Sending a Message (`send_sig`)**
+## **4. Sending a Message (`handle_send_signal`)**
 ```c
-void send_sig(int pid, char *str)
+void	handle_handle_send_signalnal(int pid, char *str)
 {
 	int	bit;
 	int	i;
@@ -104,7 +106,7 @@ void send_sig(int pid, char *str)
 			if (bit == 0)
 				kill(pid, SIGUSR2);
 			i--;
-			wait_sig();
+			wait_validation_from_server();
 		}
 		str++;
 	}
@@ -112,7 +114,7 @@ void send_sig(int pid, char *str)
 	while (i < 8)
 	{
 		kill(pid, SIGUSR2);
-		wait_sig();
+		wait_validation_from_server();
 		i++;
 	}
 }
@@ -123,7 +125,7 @@ void send_sig(int pid, char *str)
 - It loops through each character in the message.
 - Each character is broken down into 8 bits.
 - It sends `SIGUSR1` for `1` bits and `SIGUSR2` for `0` bits.
-- After sending each bit, it calls `wait_sig()` to ensure the server received it before sending the next one.
+- After sending each bit, it calls `wait_validation_from_server()` to ensure the server received it before sending the next one.
 - At the end of the message, it sends **8 `SIGUSR2` signals** to mark the end.
 
 
@@ -142,7 +144,7 @@ while (*str)
         if (bit == 0)
             kill(pid, SIGUSR2);
         i--;
-        wait_sig();
+        wait_validation_from_server();
     }
     str++;
 }
@@ -151,7 +153,7 @@ while (*str)
 - The inner **while** loop iterates over each bit of the current character, starting from the most significant bit (7) to the least significant bit (0).
 - **bit = (*str >> i) & 1**; extracts the i-th bit of the current character.
 - Depending on the value of the bit, it sends either **SIGUSR1** (for bit 1) or **SIGUSR2** (for bit 0) to the server process identified by **pid**.
-- After sending each bit, it calls **wait_sig()** to wait for an acknowledgment from the server.
+- After sending each bit, it calls **wait_validation_from_server()** to wait for an acknowledgment from the server.
 
 ### Sending End-of-Message Signal:
 
@@ -160,14 +162,14 @@ i = 0;
 while (i < 8)
 {
     kill(pid, SIGUSR2);
-    wait_sig();
+    wait_validation_from_server();
     i++;
 }
 ```
 
 - After all characters in the string have been sent, the function sends 8 **SIGUSR2** signals.
 - This is used to indicate the end of the message. The server can recognize this sequence of 8 **SIGUSR2** signals as a special marker that signifies the end of the transmission.
-- Each **SIGUSR2** signal is followed by a call to **wait_sig()** to wait for an acknowledgment from the server.
+- Each **SIGUSR2** signal is followed by a call to **wait_validation_from_server()** to wait for an acknowledgment from the server.
 
 #### **Example of Bit Sending**
 For the character `'A'` (`ASCII 65`):
@@ -213,7 +215,7 @@ int	main(int ac, char **av)
 	if (!*av[2])
 		exit(EXIT_SUCCESS);
 	set_sigaction(ack_handler, 3);
-	send_sig(pid, av[2]);
+	handle_send_signal(pid, av[2]);
 	return(0);
 }
 ```
@@ -238,7 +240,7 @@ int	main(int ac, char **av)
    ```
 6. **Send the Message**
    ```c
-   send_sig(pid, av[2]);
+   handle_send_signal(pid, av[2]);
    ```
 ---
 
