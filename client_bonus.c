@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rita <rita>                                +#+  +:+       +#+        */
+/*   By: rita <rita@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 10:45:34 by rita              #+#    #+#             */
-/*   Updated: 2025/02/18 10:45:34 by rita             ###   ########.fr       */
+/*   Created: 2025/02/13 18:26:45 by rita              #+#    #+#             */
+/*   Updated: 2025/02/17 14:35:06 by rita         ###   ########.fr           */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	stablish_link_with_server(int signum, siginfo_t *info, void *content)
 	(void) info;
 	if (signum == SIGUSR1)
 		g_acknowledgment_status = 1;
+	else if (signum == SIGUSR2)
+		write(1, "Thanks my dear, msg received!\n", 30);
 	else
 	{
 		write(2, "problem with the server\n", 20);
