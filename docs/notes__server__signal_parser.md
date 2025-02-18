@@ -11,30 +11,30 @@
 // src: server.c
 void	signal_parser(int signal, siginfo_t *info, void *context)
 {
-	static char	c = 0;      				  		   // Static variable to store the current character
-	static int	bit = 0;  							   // Static variable to store the current bit position
+	static char	c = 0;									// Static variable to store the current character
+	static int	bit = 0;								// Static variable to store the current bit position
 
-	(void) context;        							   // Unused parameter
-	c = (c << 1) | (signal == SIGUSR1);				   // Shift left and add the received bit
-	bit++;                   						   // Increment bit position
-	if (bit == 8)            						   // If 8 bits are received (one character)
+	(void) context;										// Unused parameter
+	c = (c << 1) | (signal == SIGUSR1);					// Shift left and add the received bit
+	bit++;												// Increment bit position
+	if (bit == 8)										// If 8 bits are received (one character)
 	{
-		if (c == 0 && g_str) 						   // If the character is null and g_str is not null
+		if (c == 0 && g_str)							// If the character is null and g_str is not null
 		{
-			ft_printf("%s\n", g_str);  				   // Print the received string
-			free(g_str);               				   // Free the allocated memory
-			g_str = NULL;              				   // Reset g_str to NULL
+			ft_printf("%s\n", g_str);					// Print the received string
+			free(g_str);								// Free the allocated memory
+			g_str = NULL;								// Reset g_str to NULL
 		}
 		else
 		{
-			g_str = ft_addchar(g_str, c);  			   // Add the character to g_str
-			if (!g_str)                    			   // If memory allocation fails
-				return ;                   			   // Return from the function
+			g_str = ft_addchar(g_str, c);				// Add the character to g_str
+			if (!g_str)									// If memory allocation fails
+				return ;								// Return from the function
 		}
-		c = 0;                						   // Reset the character
-		bit = 0;                					   // Reset the bit position
+		c = 0;											// Reset the character
+		bit = 0;										// Reset the bit position
 	}
-	**kill**(info->si_pid, SIGUSR1);   				   // Send acknowledgment signal to the client
+	**kill**(info->si_pid, SIGUSR1);					// Send acknowledgment signal to the client
 }
 ```
 ---

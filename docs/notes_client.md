@@ -21,10 +21,10 @@ volatile sig_atomic_t g_acknowledgment_status;
 ```
 - `g_acknowledgment_status` is a global variable that the signal handler will modify.
 - `volatile` ensures the compiler does not optimize away reads/writes since signals can change it asynchronously.
-- `sig_atomic_t` is a type that guarantees atomic access (safe from interruptions by signals).
+- `sig_atomic_t` : is a data type that is guaranteed to be read and written **atomically**. This means that operations on variables of this type are safe from being interrupted by signals, ensuring data consistency. It is typically used for flag variables in signal handlers.
+	- In the context of **sig_atomic_t**, **"atomically"** means that operations on variables of this type are completed in a single step without the possibility of being interrupted. This ensures that the variable's value is always consistent and not partially updated, even if a signal interrupts the program.
 
 ---
-
 ## **2. Acknowledgment Handler (`ack_handler`)**
 
 #### Sumary :
@@ -33,17 +33,17 @@ volatile sig_atomic_t g_acknowledgment_status;
 ```c
 void stablish_link_with_server(int signum, siginfo_t *info, void *context) // listen_server
 {
-    (void) context;                     // Unused parameter
-    (void) info;                        // Unused parameter
-    if (signum == SIGUSR1)              // Check if we have an income signal type SIGUSR1 or SIGUSR2
-        g_acknowledgment_status = 1;    // Set acknowledgment status to 1
-    else if (signum == SIGUSR2)         // If the server answers back SIGUSR2 we print a msg statement that validates the client the server received and printed the msg. 
-        write(1, "Thanks my dear, msg received!\n", 30);
-    else // If the signal is not SIGUSR1 or SIGUSR2 (that means we didn't had any feedback from the server) could mean the pid is wrong or that the server is off for ex. 
-    {
-        write(2, "problem with the server\n", 20); 
-        exit(EXIT_FAILURE);              // Exit the program with failure status
-    }
+	(void) context;						// Unused parameter
+	(void) info;						// Unused parameter
+	if (signum == SIGUSR1)				// Check if we have an income signal type SIGUSR1 or SIGUSR2
+		g_acknowledgment_status = 1;	// Set acknowledgment status to 1
+	else if (signum == SIGUSR2)			// If the server answers back SIGUSR2 we print a msg statement that validates the client the server received and printed the msg. 
+		write(1, "Thanks my dear, msg received!\n", 30);
+	else // If the signal is not SIGUSR1 or SIGUSR2 (that means we didn't had any feedback from the server) could mean the pid is wrong or that the server is off for ex. 
+	{
+		write(2, "problem with the server\n", 20); 
+		exit(EXIT_FAILURE);              // Exit the program with failure status
+	}
 }
 ```
 
@@ -57,21 +57,21 @@ This function waits for a response (acknowledgment) from the server after the cl
 ```c
 void wait_validation_from_server(void)
 {
-    int retries = 10000; // Max retries (~1 second total with 100us sleep)
-    
-    while (!g_acknowledgment_status && retries > 0) // Loop until acknowledgment is received or retries run out
-    {
-        usleep(100); // Sleep for 100 microseconds
-        retries--; // Decrement retries
-    }
-    
-    if (retries == 0) // If retries run out
-    {
-        write(2, "server fail to validate", 23);
-        exit(EXIT_FAILURE);
-    }
+	int retries = 10000;							// Max retries (~1 second total with 100us sleep)
+	
+	while (!g_acknowledgment_status && retries > 0) // Loop until acknowledgment is received or retries run out
+	{
+		usleep(100);								// Sleep for 100 microseconds
+		retries--;									// Decrement retries
+	}
+	
+	if (retries == 0)								// If retries run out
+	{
+		write(2, "server fail to validate", 23);
+		exit(EXIT_FAILURE);
+	}
 
-    g_acknowledgment_status = 0; // Reset acknowledgment status
+	g_acknowledgment_status = 0;                    // Reset acknowledgment status
 }
 ```
 
@@ -135,18 +135,18 @@ void	handle_handle_send_signalnal(int pid, char *str)
 
 while (*str)
 {
-    i = 7;
-    while (i >= 0)
-    {
-        bit = (*str >> i) & 1;
-        if (bit == 1)
-            kill(pid, SIGUSR1);
-        if (bit == 0)
-            kill(pid, SIGUSR2);
-        i--;
-        wait_validation_from_server();
-    }
-    str++;
+	i = 7;
+	while (i >= 0)
+	{
+		bit = (*str >> i) & 1;
+		if (bit == 1)
+			kill(pid, SIGUSR1);
+		if (bit == 0)
+			kill(pid, SIGUSR2);
+		i--;
+		wait_validation_from_server();
+	}
+	str++;
 }
 ```
 - The outer **while** loop iterates over each character in the string **str**.
@@ -161,9 +161,9 @@ while (*str)
 i = 0;
 while (i < 8)
 {
-    kill(pid, SIGUSR2);
-    wait_validation_from_server();
-    i++;
+	kill(pid, SIGUSR2);
+	wait_validation_from_server();
+	i++;
 }
 ```
 
