@@ -1,5 +1,5 @@
 <h1 align="center">
-	💬 minitalk
+	💬 mini-Catharsis
 </h1>
 
 <p align="center">
@@ -8,9 +8,12 @@
 
 ---
 
+<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ReivenIV/minitalk?color=lightblue" />
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ReivenIV/minitalk?color=green" />
+
 ## 💡 About the project
 
-> _The purpose of this project is to code a small data "catarsis" program using
+> _The purpose of this project is to code a small data "Catharsis" program using
 UNIX signals._
 
 ## 🛠️ Usage
